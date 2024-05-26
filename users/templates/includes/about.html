@@ -1,0 +1,137 @@
+{% load static tailwind_tags %}<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<title>Forums</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+			rel="stylesheet" />
+		<link
+			rel="stylesheet"
+			href="{% static 'css/style.css' %}" />
+		{% tailwind_css %}
+	</head>
+	<body class="bg">
+		
+		<div class="mb-4 border-b border-pink-200">
+			<ul
+				class="flex flex-wrap -mb-px text-sm font-medium text-center"
+				id="default-tab"
+				data-tabs-toggle="#default-tab-content"
+				role="tablist">
+				<li
+					class="me-2"
+					role="presentation">
+					<button
+						class="inline-block p-4 border-b-2 rounded-t-lg"
+						id="profile-tab"
+						data-tabs-target="#profile"
+						type="button"
+						role="tab"
+						aria-controls="profile"
+						aria-selected="false">
+						Page
+					</button>
+				</li>
+				<li
+					class="me-2"
+					role="presentation">
+					<button
+						class="inline-block p-4 border-b-2 rounded-t-lg hover:text-pink-600 hover:border-pink-300"
+						id="dashboard-tab"
+						data-tabs-target="#dashboard"
+						type="button"
+						role="tab"
+						aria-controls="dashboard"
+						aria-selected="false">
+						<i
+							class="fa fa-code"
+							aria-hidden="true"></i>
+						Developer
+					</button>
+				</li>
+				<li
+					class="me-2"
+					role="presentation">
+					<button
+						class="inline-block p-4 border-b-2 rounded-t-lg hover:text-pink-600 hover:border-pink-300"
+						id="settings-tab"
+						data-tabs-target="#settings"
+						type="button"
+						role="tab"
+						aria-controls="settings"
+						aria-selected="false">
+						<i
+							class="fa fa-link"
+							aria-hidden="true"></i>
+						References
+					</button>
+				</li>
+			</ul>
+		</div>
+		<div id="default-tab-content">
+			<div
+				class="hidden p-4 rounded-lg bg-pink-900"
+				id="profile"
+				role="tabpanel"
+				aria-labelledby="profile-tab">
+				<p class="text-xl text-white">
+					Welcome to Online Learnhub: Connected Minds, Sharing Knowledge, this project is a subject requirement that
+					contains the developer information, features, disclaimer and references.
+				</p>
+			</div>
+			<div
+				class="hidden p-4 rounded-lg bg-pink-200/10"
+				id="dashboard"
+				role="tabpanel"
+				aria-labelledby="profile-tab">
+				<p class="text-sm text-white">
+                    <img src="{% static 'img/me.png' %}" alt="">
+                </p>
+			</div>
+			<div
+				class="hidden p-4 rounded-lg bg-pink-900"
+				id="settings"
+				role="tabpanel"
+				aria-labelledby="profile-tab">
+				<div class="text-xl text-white">
+					<b>
+						<a
+							target="_blank"
+							href="https://www.bing.com/ck/a?!&&p=d474b5ad04d972d7JmltdHM9MTcxMDk3OTIwMCZpZ3VpZD0zNWQ3YTEzYS1lMzBkLTZiZDEtMGZjZS1iMDM3ZTI2MzZhMjUmaW5zaWQ9NTIwMA&ptn=3&ver=2&hsh=3&fclid=35d7a13a-e30d-6bd1-0fce-b037e2636a25&psq=workday+schedule+with+via+SMS+notification&u=a1aHR0cHM6Ly93d3cud29ya2RheS5jb20vZW4tdXMvcHJvZHVjdHMvcGxhdGZvcm0tcHJvZHVjdC1leHRlbnNpb25zL3dvcmtkYXktbWVzc2FnaW5nLmh0bWw&ntb=1">
+							https://www.bing.com/ck/a?!&&p=d474b5ad04d972d7JmltdHM9MTcxMDk3OTIwMCZpZ3VpZD0zNWQ3YTEzYS1lMzBkLTZiZDEtMGZjZS1iMDM3ZTI2MzZhMjUmaW5zaWQ9NTIwMA&ptn=3&ver=2&hsh=3&fclid=35d7a13a-e30d-6bd1-0fce-b037e2636a25&psq=workday+schedule+with+via+SMS+notification&u=a1aHR0cHM6Ly93d3cud29ya2RheS5jb20vZW4tdXMvcHJvZHVjdHMvcGxhdGZvcm0tcHJvZHVjdC1leHRlbnNpb25zL3dvcmtkYXktbWVzc2FnaW5nLmh0bWw&ntb=1
+						</a>
+					</b>
+					<br />
+					<br />
+					<b>
+						<a
+							target="_blank"
+							href="https://www.sciencedirect.com/science/article/pii/S1574119217304388
+">
+							https://www.sciencedirect.com/science/article/pii/S1574119217304388
+						</a>
+					</b>
+					<br />
+					<br />
+					<b>
+						<a
+							target="_blank"
+							href="https://dl.acm.org/doi/abs/10.1145/3170427.3188688
+">
+							https://dl.acm.org/doi/abs/10.1145/3170427.3188688
+						</a>
+					</b>
+				</div>
+			</div>
+		</div>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+	</body>
+</html>

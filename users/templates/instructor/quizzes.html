@@ -1,0 +1,251 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>BSIT Blackboard</title>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<meta
+			http-equiv="X-UA-Compatible"
+			content="ie=edge" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+			rel="stylesheet" />
+
+		<!-- DataTables CSS -->
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css" />
+
+		<!-- jQuery -->
+		<script
+			type="text/javascript"
+			charset="utf8"
+			src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+		<!-- DataTables JS -->
+		<script
+			type="text/javascript"
+			charset="utf8"
+			src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
+		<link
+			rel="stylesheet"
+			href="{% static 'css/style.css' %}" />
+		{% tailwind_css %}
+	</head>
+
+	<body class="bg font-sans leading-normal tracking-normal overflow-x-hidden">
+		{% include 'includes/instructor_sidebar.html' %}
+
+		<div class="p-4 sm:ml-64 bg-gray-900/60 h-screen">
+			<div class="flex items-center justify-between mx-4 mt-24">
+				<p class="text-5xl font-bold text-white">Quizzes</p>
+
+				<button
+					data-modal-target="quizz-modal"
+					data-modal-toggle="quizz-modal"
+					class="block text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+					type="button">
+					<i
+						class="fa fa-plus-circle mr-1"
+						aria-hidden="true"></i>
+					Add Quizz
+				</button>
+			</div>
+
+			{% for message in messages%} {% if message.level_tag == 'success' %}
+			<p class="text-center text-green-400 font-bold mt-14 text-md">{{message}}</p>
+			{% else %}
+			<p class="text-center text-red-400 font-bold mt-14 text-md">{{message}}</p>
+			{%endif%} {% endfor %}
+			<div class="py-8 mt-4 text-center flex justify-evenly flex-wrap">
+				{% for items in quiz %}
+
+				<div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow relative">
+					<a href="#">
+						<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{{items.title}}</h5>
+					</a>
+					<a
+						href="{% url 'deletequiz' items.id %}"
+						class="inline-flex absolute top-2 right-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800">
+						<i
+							class="fa fa-trash"
+							aria-hidden="true"></i>
+					</a>
+					<p class="mb-3 font-normal text-gray-900">
+						<b>Number of questions:</b>
+						{{ items.questions_set.all.count }}
+					</p>
+					<a
+						href="{% url 'questions' q_id=items.id %}"
+						class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300">
+						<i class="fas fa-plus-circle mr-1"></i>
+						Add Questions
+					</a>
+
+					<a
+						href="#"
+						data-modal-target="{{items.id}}-modal"
+						data-modal-toggle="{{items.id}}-modal"
+						class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300">
+						<i
+							class="fa fa-eye mr-1"
+							aria-hidden="true"></i>
+						See Scores
+					</a>
+				</div>
+
+				{% endfor %}
+			</div>
+		</div>
+
+		{% for items in quiz %}
+		<div
+			id="{{items.id}}-modal"
+			tabindex="-1"
+			aria-hidden="true"
+			class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+			<div class="relative p-4 w-full max-w-2xl max-h-full">
+				<!-- Modal content -->
+
+				<div class="relative bg-white rounded-lg shadow">
+					<!-- Modal header -->
+					<div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
+						<h3 class="text-xl font-semibold text-gray-900">
+							Lists of Student who take the
+							<b class="text-green-800">{{items.title}}</b>
+						</h3>
+						<button
+							type="button"
+							class="text-gray-400 bg-transparent hover:bg-gray-200 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:text-white"
+							data-modal-hide="quizz-modal">
+							<svg
+								class="w-3 h-3"
+								aria-hidden="true"
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 14 14">
+								<path
+									stroke="currentColor"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+							</svg>
+							<span class="sr-only">Close modal</span>
+						</button>
+					</div>
+					<!-- Modal body -->
+					<div class="p-4 md:p-5 space-y-4">
+						{% for score in items.score_set.all %}
+						<div class="my-4 bg-green-500 text-white py-1.5 px-4 rounded-xl shadow-lg font-bold">
+							<p>Name: {{ score.taker.first_name }}</p>
+							<p>Score: {{ score.score }}</p>
+						
+						</div>
+						{% endfor %}
+					</div>
+					<!-- Modal footer -->
+					<div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
+						<button
+							data-modal-hide="quizz-modal"
+							type="button"
+							class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-red-400 rounded-lg border border-red-200 hover:bg-red-100 hover:text-green-700 focus:z-10 focus:ring-4 focus:ring-red-100">
+							Close
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+
+		<!-- Main modal -->
+		<div
+			id="quizz-modal"
+			tabindex="-1"
+			aria-hidden="true"
+			class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+			<div class="relative p-4 w-full max-w-2xl max-h-full">
+				<!-- Modal content -->
+				<form
+					action="#"
+					method="POST"
+					enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="relative bg-white rounded-lg shadow">
+						<!-- Modal header -->
+						<div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
+							<h3 class="text-xl font-semibold text-gray-900">Add Quizz</h3>
+							<button
+								type="button"
+								class="text-gray-400 bg-transparent hover:bg-gray-200 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:text-white"
+								data-modal-hide="quizz-modal">
+								<svg
+									class="w-3 h-3"
+									aria-hidden="true"
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 14 14">
+									<path
+										stroke="currentColor"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+								</svg>
+								<span class="sr-only">Close modal</span>
+							</button>
+						</div>
+						<!-- Modal body -->
+						<div class="p-4 md:p-5 space-y-4">
+							<div class="mb-5">
+								<label
+									for="title"
+									class="block mb-2 text-sm font-medium text-gray-900">
+									Title
+								</label>
+								<input
+									type="text"
+									id="title"
+									name="title"
+									class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 placeholder-gray-400 shadow-sm-light"
+									placeholder="Midterm Quiz"
+									required />
+							</div>
+						</div>
+						<!-- Modal footer -->
+						<div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
+							<button
+								type="submit"
+								name="submit"
+								class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+								Create
+							</button>
+							<button
+								data-modal-hide="quizz-modal"
+								type="button"
+								class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
+								Decline
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+
+		<script>
+			$(document).ready(function () {
+				$("#example").DataTable();
+			});
+		</script>
+	</body>
+</html>

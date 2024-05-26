@@ -1,0 +1,111 @@
+{% load static tailwind_tags %}<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<title>Topic</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+			rel="stylesheet" />
+		{% tailwind_css %}
+	</head>
+	<body>
+		{% include 'includes/student_sidebar.html' %}
+
+		<div class="p-4 sm:ml-64 mt-24">
+
+			<div class="mb-8">
+				<p class="text-left text-4xl font-bold my-4">Lessons</p>
+
+				
+			</div>
+
+			<div class="p-4">
+				<div class="bg-gray-10 items-center justify-start">
+					<div class="px-1 sm:px-8 py-1 sm:py-8">
+						{% for topic in topic_lists  %}
+						
+						<div class="px-10 my-8 py-8 border-2 rounded-xl border-black">
+							<div class="flex items-center">
+								<div class="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center font-bold text-white">
+									<i
+										class="fa fa-user-circle text-xl"
+										aria-hidden="true"></i>
+								</div>
+								<div class="flex flex-col w-full">
+									<div class="flex justify-between">
+										<p class="ml-2 text-gray-500">{{topic.uploader.first_name}}</p>
+										
+									</div>
+									<p class="ml-2 text-xs">Posted a Topic</p>
+								</div>
+							</div>
+							<div class="mt-4">
+								<h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer">{{topic.title}}</h1>
+								<p class="mt-2 text-sm font-semibold text-gray-400">{{topic.upload_date}}</p>
+								<p class="mt-4 text-md text-gray-600 break-all">{{topic.description}}</p>
+								<a
+									href="{{topic.file.url}}"
+									target="_blank"
+									download="{{topic.file}}"
+									class="mt-4 mr-2 rounded-lg flex flex-row items-center w-fit p-2 px-6 font-bold duration-300">
+									<i
+										class="fa fa-download mr-2"
+										aria-hidden="true"></i>
+									Download File
+									<span
+										id="fileName"
+										class=""></span>
+								</a>
+								<div></div>
+								<div class="flex justify-between items-center">
+									<!-- <div class="mt-4 flex items-center space-x-4 py-6">
+										<a
+											href="#"
+											class="text-md font-semibold hover:text-blue-400 hover:scale-105 duration-300">
+											<i class="fa-solid fa-comment-dots"></i>
+											0 Comments
+										</a>
+									</div> -->
+								</div>
+							</div>
+						</div>
+
+						<!-- <script>
+							// Get the filename from the full path
+							var fullPath = "{{topic.file}}";
+							var fileName = fullPath.split('/').pop();
+							
+							// Set the extracted filename in the span element
+							document.getElementById("fileName").innerText = fileName;
+						</script> -->
+						{% endfor %}
+					</div>
+				</div>
+		</div>
+		<script>
+					function searchDivs() {
+						var input, filter, titles, i;
+						input = document.getElementById("searchInput");
+						filter = input.value.toUpperCase();
+						titles = document.querySelectorAll(".forumTitle");
+
+						titles.forEach(function (title) {
+							var titleText = title.textContent || title.innerText;
+							if (titleText.toUpperCase().indexOf(filter) > -1) {
+								title.closest(".bg-white").style.display = "";
+							} else {
+								title.closest(".bg-white").style.display = "none";
+							}
+						});
+					}
+				</script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+		
+	</body>
+</html>

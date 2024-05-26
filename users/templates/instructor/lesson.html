@@ -1,0 +1,212 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<title>Topic</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+			rel="stylesheet" />
+		{% tailwind_css %}
+	</head>
+	<body>
+		{% include 'includes/instructor_sidebar.html' %}
+
+		<div class="p-2 sm:p-4 sm:ml-64 mt-24">
+			<!-- Modal toggle -->
+
+			<div class="p-4">
+				<div class="flex justify-end text-white mb-2">
+					<button
+						data-modal-target="authentication-modal"
+						data-modal-toggle="authentication-modal"
+						class="flextext-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+						type="button">
+						Create Lesson
+					</button>
+				</div>
+
+				{% for message in messages%} {% if message.level_tag == 'success' %}
+				<p class="text-center text-green-400 font-bold mt-14 text-md">{{message}}</p>
+				{% else %}
+				<p class="text-center text-red-400 font-bold mt-14 text-md">{{message}}</p>
+				{%endif%} {% endfor %}
+
+				<!-- component -->
+
+				<div class="bg-gray-10 items-center justify-start">
+					<div class="px-1 sm:px-8 py-1 sm:py-8">
+						{% for topic in lesson %}
+						<div class="px-10 my-8 py-8 border-2 rounded-xl border-black">
+							<div class="flex items-center">
+								<div class="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center font-bold text-white">
+									<i
+										class="fa fa-user-circle text-xl"
+										aria-hidden="true"></i>
+								</div>
+								<div class="flex flex-col w-full">
+									<div class="flex justify-between">
+										<p class="ml-2 text-gray-500">{{topic.uploader.first_name}}</p>
+										<a
+											href="{% url 'deletelesson' topic.id %}"
+											class="flex items-center justify-center text-sm text-red-400 font-bold">
+											<i
+												class="fa fa-trash mr-2"
+												aria-hidden="true"></i>
+											Remove
+										</a>
+									</div>
+									<p class="ml-2 text-xs">Posted a Topic</p>
+								</div>
+							</div>
+							<div class="mt-4">
+								<h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer">{{topic.title}}</h1>
+								<p class="mt-2 text-sm font-semibold text-gray-400">{{topic.upload_date}}</p>
+								<p class="mt-4 text-md text-gray-600 break-all">{{topic.description}}</p>
+								<a
+									href="{{topic.file.url}}"
+									target="_blank"
+									download="{{topic.file}}"
+									class="mt-4 mr-2 rounded-lg flex flex-row items-center w-fit p-2 px-6 font-bold duration-300">
+									<i
+										class="fa fa-download mr-2"
+										aria-hidden="true"></i>
+									Download File
+									<span
+										id="fileName"
+										class=""></span>
+								</a>
+								<div></div>
+								<div class="flex justify-between items-center">
+									<!-- <div class="mt-4 flex items-center space-x-4 py-6">
+										<a
+											href="#"
+											class="text-md font-semibold hover:text-blue-400 hover:scale-105 duration-300">
+											<i class="fa-solid fa-comment-dots"></i>
+											0 Comments
+										</a>
+									</div> -->
+								</div>
+							</div>
+						</div>
+
+						<script>
+							// Get the filename from the full path
+							var fullPath = "{{topic.file}}";
+							var fileName = fullPath.split("/").pop();
+
+							// Set the extracted filename in the span element
+							document.getElementById("fileName").innerText = fileName;
+						</script>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Main modal -->
+		<div
+			id="authentication-modal"
+			tabindex="-1"
+			aria-hidden="true"
+			class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+			<div class="relative p-4 w-full max-w-3xl max-h-full">
+				<!-- Modal content -->
+				<div class="relative bg-white rounded-lg shadow">
+					<!-- Modal header -->
+					<div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
+						<h3 class="text-xl font-semibold text-gray-900">New Lesson</h3>
+						<button
+							type="button"
+							class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+							data-modal-hide="authentication-modal">
+							<svg
+								class="w-3 h-3"
+								aria-hidden="true"
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 14 14">
+								<path
+									stroke="currentColor"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+							</svg>
+							<span class="sr-only">Close modal</span>
+						</button>
+					</div>
+					<!-- Modal body -->
+					<div class="p-4 md:p-5">
+						<form
+							class="space-y-4"
+							action="#"
+							method="post"
+							enctype="multipart/form-data">
+							{% csrf_token %}
+							<div>
+								<label
+									for="title"
+									class="block mb-2 text-sm font-medium text-gray-900">
+									Title
+								</label>
+								<input
+									type="text"
+									name="title"
+									id="title"
+									class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400"
+									required />
+							</div>
+							<div class="mb-3">
+								<label
+									for="formFile"
+									class="mb-2 inline-block text-neutral-500">
+									Insert File
+									<span class="text-xs text-orange-300">(only 1 file can upload per forum)</span>
+								</label>
+								<input
+									class="block w-full text-sm text-gray-400 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+									id="formFile"
+									type="file"
+									name="file" />
+							</div>
+							<div class="col-span-2">
+								<label
+									for="description"
+									class="block mb-2 text-sm font-medium text-gray-900">
+									Discussion
+								</label>
+								<textarea
+									id="description"
+									name="description"
+									rows="6"
+									class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+									required></textarea>
+							</div>
+							<div>
+								<button
+									type="submit"
+									class="w-lg text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+									Post
+								</button>
+								<button
+									data-modal-hide="authentication-modal"
+									class="w-lg text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+									Close
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+	</body>
+</html>

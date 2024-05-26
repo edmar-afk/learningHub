@@ -1,0 +1,108 @@
+{% load static tailwind_tags %}<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Login</title>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<meta
+			http-equiv="X-UA-Compatible"
+			content="ie=edge" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+			rel="stylesheet" />
+		<link
+			rel="stylesheet"
+			href="{% static 'css/style.css' %}" />
+		{% tailwind_css %}
+	</head>
+
+	<body class="font-sans leading-normal tracking-normal bg">
+		{% include 'includes/navbar.html' %}
+		<!-- component -->
+		<div class="bg-pink-100/90 flex items-center justify-center h-screen">
+			<div class="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full mt-24">
+				<center>
+					<div class="relative whitespace-nowrap text-pink-900 mb-8 w-fit">
+						<svg
+							aria-hidden="true"
+							viewBox="0 0 418 42"
+							class="absolute top-2/3 left-0 h-[0.58em] w-full fill-pink-900/70"
+							preserveAspectRatio="none">
+							<path
+								d="M203.371.916c-26.013-2.078-76.686 1.963-124.73 9.946L67.3 12.749C35.421 18.062 18.2 21.766 6.004 25.934 1.244 27.561.828 27.778.874 28.61c.07 1.214.828 1.121 9.595-1.176 9.072-2.377 17.15-3.92 39.246-7.496C123.565 7.986 157.869 4.492 195.942 5.046c7.461.108 19.25 1.696 19.17 2.582-.107 1.183-7.874 4.31-25.75 10.366-21.992 7.45-35.43 12.534-36.701 13.884-2.173 2.308-.202 4.407 4.442 4.734 2.654.187 3.263.157 15.593-.78 35.401-2.686 57.944-3.488 88.365-3.143 46.327.526 75.721 2.23 130.788 7.584 19.787 1.924 20.814 1.98 24.557 1.332l.066-.011c1.201-.203 1.53-1.825.399-2.335-2.911-1.31-4.893-1.604-22.048-3.261-57.509-5.556-87.871-7.36-132.059-7.842-23.239-.254-33.617-.116-50.627.674-11.629.54-42.371 2.494-46.696 2.967-2.359.259 8.133-3.625 26.504-9.81 23.239-7.825 27.934-10.149 28.304-14.005.417-4.348-3.529-6-16.878-7.066Z"></path>
+						</svg>
+						<span class="relative text-4xl">Login</span>
+					</div>
+				</center>
+				{% for message in messages%} {% if message.level_tag == 'success' %}
+				<p class="text-center text-green-400 font-bold mt-14 text-md">{{message}}</p>
+				{% else %}
+				<p class="text-center text-red-400 font-bold mt-14 text-md">{{message}}</p>
+				{%endif%} {% endfor %}
+				<form
+					method="POST"
+					enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="mb-4">
+						<label
+							for="email"
+							class="block text-pink-700 text-sm font-semibold mb-2">
+							Email
+						</label>
+						<input
+							type="email"
+							id="email"
+							name="email"
+							class="form-input w-full px-4 py-2 border rounded-lg text-pink-700 focus:ring-pink-500"
+							required
+							placeholder="jay@gmail.com" />
+					</div>
+
+					<div class="mb-6">
+						<label
+							for="password"
+							class="block text-pink-700 text-sm font-semibold mb-2">
+							Password
+						</label>
+						<input
+							type="password"
+							id="password"
+							name="password"
+							class="form-input w-full px-4 py-2 border rounded-lg text-pink-700 focus:ring-pink-500"
+							required
+							placeholder="••••••••" />
+						<p class="text-pink-600 text-md mt-3">
+							Don't Have Account?
+							<a
+								href="{% url 'register' %}"
+								class="text-pink-500 font-bold underline">
+								<i class="fa fa-user-plus" aria-hidden="true"></i> Register
+							</a>
+						</p>
+					</div>
+					<button
+						type="submit"
+						name="submit"
+						class="w-full bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50">
+						<i class="fas fa-door-open    "></i> Login
+					</button>
+					<p class="text-pink-600 text-xs text-center mt-4">
+						Back to
+						<a
+							href="{% url 'homepage' %}"
+							class="text-pink-500 hover:underline">
+							Home
+						</a>
+					</p>
+				</form>
+			</div>
+		</div>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+	</body>
+</html>

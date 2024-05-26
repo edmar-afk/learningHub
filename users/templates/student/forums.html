@@ -1,0 +1,126 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<title>Forums</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+			rel="stylesheet" />
+			<link
+			rel="stylesheet"
+			href="{% static 'css/style.css' %}" />
+		{% tailwind_css %}
+	</head>
+	<body class="bg">
+		{% include 'includes/student_sidebar.html' %}
+
+		<div class="p-2 sm:p-4 sm:ml-64 mt-24 bg-pink-100/90 h-full">
+			<div class="p-4">
+				<div>
+					<p class="text-left text-4xl font-bold my-4">Forums</p>
+				</div>
+
+				{% for forum in forums %}
+				<div class="mx-auto flex items-center justify-center overflow-hidden border-2 rounded-xl border-pink-900 p-4 my-8 shadow-xl">
+					<div class="flex flex-col w-full bg-white rounded shadow-lg">
+						<div class="w-full h-fit bg-top bg-cover rounded-t">
+							{% if forum.file %}
+								{% with file_extension=forum.file.name|lower|slice:"-4:" %}
+									{% if file_extension == '.png' or file_extension == '.jpg' or file_extension == '.jpeg' or file_extension == '.gif' %}
+										<center>
+											<img src="{{ forum.file.url }}" alt="Attached image" width="40%" class="my-8 rounded-xl" />
+										</center>
+									{% elif file_extension == '.mp4' or file_extension == '.webm' or file_extension == '.ogg' %}
+										<center>
+											<video width="80%" controls class="my-8 rounded-xl">
+												<source src="{{ forum.file.url }}" type="video/{{ file_extension|slice:'-3:' }}">
+												Your browser does not support the video tag.
+											</video>
+										</center>
+									{% elif file_extension == '.pdf' or file_extension == '.ppt' or file_extension == 'pptx' or file_extension == '.doc' or file_extension == '.docx' %}
+										<center>
+											<a href="{{ forum.file.url }}" download class="my-8 rounded-xl bg-pink-700 text-white py-1.5 px-4 text-left shadow-xl hover:scale-110 duration-300">Download {{ file_extension|slice:1|upper }} file</a>
+										</center>
+									{% else %}
+										<center>
+											<br><br>
+											<a href="{{ forum.file.url }}" download class="my-12 rounded-xl bg-pink-700 text-white py-1.5 px-4 text-left shadow-xl hover:scale-110 duration-300">Download {{ file_extension|slice:100|upper }} file</a>
+										<br><br></center>
+									{% endif %}
+									
+								{% endwith %}
+
+								{% else %}
+								<img
+									src="{% static 'img/forum.png' %}" draggable="false"
+									alt="" />
+							{% endif %}	
+						</div>
+						<div class="flex flex-col w-full md:flex-row bg-white">
+							<div
+								class="flex flex-row justify-around p-4 font-bold leading-none text-pink-800 uppercase bg-pink-400 rounded md:flex-col md:items-center md:justify-center md:w-1/4">
+								<i class="fas fa-user-graduate text-6xl"></i>
+							</div>
+							<div class="p-4 font-normal text-pink-800 md:w-3/4">
+								<h1 class="mb-4 text-4xl font-bold leading-none tracking-tight text-pink-800">
+									{{forum.uploader.first_name}}
+									<br />
+									<p class="text-sm">{{forum.upload_date}}</p>
+								</h1>
+								<p class="leading-normal break-all">{{forum.description}}</p>
+								<div class="flex flex-row items-center mt-4 text-pink-700">
+									<div class="w-fit bg-pink-800 py-1.5 px-4 rounded-xl hover:scale-110 hover:shadow-xl duration-300">
+										<a
+											href="{% url 'forum_page' %}?forum_id={{ forum.id }}"
+											class="text-md font-semibold text-white hover:text-pink-200 hover:scale-105 duration-300">
+											<i class="fa-solid fa-comment-dots"></i>
+											{{ forum.comment_count }} Comments
+										</a>
+									</div>
+									<div class="w-fit bg-red-800 py-1.5 px-4 mx-4 rounded-xl hover:scale-110 hover:shadow-xl duration-300">
+										<a
+											href="{% url 'deleteforum' forum.id %}"
+											class="text-md font-semibold text-white hover:text-red-200 hover:scale-105 duration-300">
+											
+											<i class="fa fa-trash" aria-hidden="true"></i> Delete Forum
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Main modal -->
+				
+				{% endfor %}
+			</div>
+		</div>
+		<script>
+			function searchDivs() {
+				var input, filter, titles, i;
+				input = document.getElementById("searchInput");
+				filter = input.value.toUpperCase();
+				titles = document.querySelectorAll(".forumTitle");
+
+				titles.forEach(function (title) {
+					var titleText = title.textContent || title.innerText;
+					if (titleText.toUpperCase().indexOf(filter) > -1) {
+						title.closest(".bg-white").style.display = "";
+					} else {
+						title.closest(".bg-white").style.display = "none";
+					}
+				});
+			}
+		</script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+	</body>
+</html>

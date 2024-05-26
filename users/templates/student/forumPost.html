@@ -1,0 +1,139 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<title>Forums</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+			rel="stylesheet" />
+		<link
+			rel="stylesheet"
+			href="{% static 'css/style.css' %}" />
+		{% tailwind_css %}
+	</head>
+	<body class="bg">
+		{% include 'includes/student_sidebar.html' %}
+
+		<div class="p-2 sm:p-4 sm:ml-64 mt-24 bg-pink-100/90">
+			<div class="">
+				<div class="flex items-center justify-start">
+					<div class="px-1 sm:px-8 py-1 sm:py-6">
+						<div class="flex flex-col w-full bg-white rounded shadow-lg">
+						<div class="w-full h-fit bg-top bg-cover rounded-t">
+							{% if forum.file %}
+								{% with file_extension=forum.file.name|lower|slice:"-4:" %}
+									{% if file_extension == '.png' or file_extension == '.jpg' or file_extension == '.jpeg' or file_extension == '.gif' %}
+										<center>
+											<img src="{{ forum.file.url }}" alt="Attached image" width="40%" class="my-8 rounded-xl" />
+										</center>
+									{% elif file_extension == '.mp4' or file_extension == '.webm' or file_extension == '.ogg' %}
+										<center>
+											<video width="80%" controls class="my-8 rounded-xl">
+												<source src="{{ forum.file.url }}" type="video/{{ file_extension|slice:'-3:' }}">
+												Your browser does not support the video tag.
+											</video>
+										</center>
+									{% elif file_extension == '.pdf' or file_extension == '.ppt' or file_extension == 'pptx' or file_extension == '.doc' or file_extension == '.docx' %}
+										<center>
+											<a href="{{ forum.file.url }}" download class="my-8 rounded-xl bg-pink-700 text-white py-1.5 px-4 text-left shadow-xl hover:scale-110 duration-300">Download {{ file_extension|slice:1|upper }} file</a>
+										</center>
+									{% else %}
+										<center>
+											<br><br>
+											<a href="{{ forum.file.url }}" download class="my-12 rounded-xl bg-pink-700 text-white py-1.5 px-4 text-left shadow-xl hover:scale-110 duration-300">Download {{ file_extension|slice:100|upper }} file</a>
+										<br><br></center>
+									{% endif %}
+									
+								{% endwith %}
+
+								{% else %}
+								<img
+									src="{% static 'img/forum.png' %}" draggable="false"
+									alt="" />
+							{% endif %}	
+						</div>
+						<div class="flex flex-col w-full md:flex-row bg-white">
+							<div
+								class="flex flex-row justify-around p-4 font-bold leading-none text-pink-800 uppercase bg-pink-400 rounded md:flex-col md:items-center md:justify-center md:w-1/4">
+								<i class="fas fa-user-graduate text-6xl"></i>
+							</div>
+							<div class="p-4 font-normal text-pink-800 md:w-3/4">
+								<h1 class="mb-4 text-4xl font-bold leading-none tracking-tight text-pink-800">
+									{{forum.uploader.first_name}}
+									<br />
+									<p class="text-sm">{{forum.upload_date}}</p>
+								</h1>
+								<p class="leading-normal break-all">{{forum.description}}</p>
+								
+							</div>
+						</div>
+					</div>
+						<p class="ml-3 py-4 font-bold">Comments</p>
+					</div>
+				</div>
+				<div>
+					{% for comment in comments %}
+					<div class="flex flex-col py-2 px-8">
+						<div class="bg-pink-200 p-2 rounded-xl">
+							<div class="flex justify-between items-center mb-2">
+								<div class="flex items-center">
+									<p class="inline-flex items-center mr-3 text-md text-pink-900 font-bold">
+										<!-- <img
+											class="mr-2 w-8 h-8 rounded-full"
+											src="{{comment.commentors.student.profile_pic}}" /> -->
+										{{comment.commentors.first_name}}
+									</p>
+									<p class="text-sm text-pink-600">{{comment.comment_date}}</p>
+								</div>
+							</div>
+							<p class="text-pink-500 ml-1">{{comment.comment}}</p>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+
+				<form
+					class="flex w-full p-2 bg-white py-2 sticky bottom-0 left-0 rounded-xl"
+					action="#"
+					method="post"
+					enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="col-span-2 flex-grow">
+						<input
+							type="text"
+							name="post"
+							class="bg-pink-50 border hidden border-pink-300 text-pink-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 placeholder-pink-400"
+							value="{{forum.id}}"
+							required />
+
+						<input
+							type="text"
+							name="comment"
+							id="title"
+							class="bg-pink-50 border border-pink-300 text-pink-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-pink-400"
+							placeholder="Write comment here"
+							required />
+					</div>
+					<div>
+						<div>
+						<button
+							type="submit"
+							class="w-lg text-white bg-pink-700 hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+							<i class="fa fa-comment" aria-hidden="true"></i> Send
+						</button>
+					</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+	</body>
+</html>

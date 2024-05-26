@@ -1,0 +1,82 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>BSIT Blackboard</title>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<meta
+			http-equiv="X-UA-Compatible"
+			content="ie=edge" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+			rel="stylesheet" />
+		{% tailwind_css %}
+	</head>
+
+	<body class="bg-gray-200 font-sans leading-normal tracking-normal">
+		{% include 'includes/student_sidebar.html' %}
+
+		<div class="p-4 sm:ml-64">
+			<div class="flex mx-4 mt-24">
+				<p class="text-5xl font-bold mb-24">Quizzes</p>
+			</div>
+
+			{% for message in messages%} {% if message.level_tag == 'success' %}
+			<p class="text-center text-green-400 font-bold mt-14 text-md">{{message}}</p>
+			{% else %}
+			<p class="text-center text-red-400 font-bold mt-14 text-md">{{message}}</p>
+			{%endif%} {% endfor %}
+
+			<div class="flex flex-col justify-evenly flex-wrap">
+				{% for quiz in quizzes %}
+				<div class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow my-3">
+					
+
+					<a href="#">
+						<h5 class="mb-2 mt-6 text-2xl font-bold tracking-tight text-gray-900">{{ quiz.title }}</h5>
+						<p class="mb-8 text-xs text-gray-400">Created by: {{ quiz.creator.first_name }}</p>
+					</a>
+					<p class="mb-3 font-normal text-gray-700">Number of Items: {{ quiz.questions_set.all.count }}</p>
+					{% with quiz.score_set.all as scores %} {% if scores %}
+					<ul class="mb-4">
+						{% for score in scores %}
+						<li class="font-bold text-blue-400">Your Score: {{ score.score }}</li>
+						{% endfor %}
+					</ul>
+					{% endif %} {% endwith %} {% if quiz.id in taken_quizzes %}
+					<div class="ms-3 text-sm font-medium text-orange-800">You can only take this quiz once.</div>
+
+					{% else %}
+					<a
+						href="{% url 'start_quiz' q_id=quiz.id %}"
+						class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+						Start Quiz
+						<svg
+							class="rtl:rotate-180 w-3.5 h-3.5 ms-2"
+							aria-hidden="true"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 14 10">
+							<path
+								stroke="currentColor"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M1 5h12m0 0L9 1m4 4L9 9" />
+						</svg>
+					</a>
+					{% endif %}
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+	</body>
+</html>
